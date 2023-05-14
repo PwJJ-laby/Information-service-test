@@ -5,18 +5,33 @@ import com.editorial.model.entity.Authority;
 import com.editorial.model.entity.User;
 import com.editorial.model.entity.UserDetails;
 import com.editorial.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import static com.editorial.util.UrlConstants.CLIENT_REGISTRATION_URL;
 
 @Service
-public class RegisterServiceImpl implements RegisterService{
+public class RegisterServiceImpl implements RegisterService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final BasicServiceImpl basicService;
 
-    public RegisterServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public RegisterServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, BasicServiceImpl basicService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.basicService = basicService;
+    }
+
+    @Override
+    public boolean checkIfUserExistsByUsername(String username) {
+        return userRepository.existsUsersByUsername(username);
     }
 
     @Override
@@ -36,7 +51,8 @@ public class RegisterServiceImpl implements RegisterService{
         userRepository.save(user);
     }
 
-    private UserDetails dtoToUserDetails(UserRegistrationDto userRegistrationDto){
+    @Override
+    public UserDetails dtoToUserDetails(UserRegistrationDto userRegistrationDto) {
         return UserDetails.builder()
                 .name(userRegistrationDto.getName())
                 .surname(userRegistrationDto.getSurname())
@@ -45,11 +61,20 @@ public class RegisterServiceImpl implements RegisterService{
                 .build();
     }
 
-    private User dtoToUser(UserRegistrationDto userRegistrationDto){
+    @Override
+    public User dtoToUser(UserRegistrationDto userRegistrationDto) {
         return User.builder()
                 .username(userRegistrationDto.getUsername())
                 .password(passwordEncoder.encode(userRegistrationDto.getPassword()))
                 .enabled(true)
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<String> registerUserEditorialToClient(UserRegistrationDto userRegistrationDto, HttpServletRequest request) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = basicService.copyHeadersFromRequest(request);
+        headers.set("X-Caller", "REGISTRATION_FROM_EDITORIAL");
+        return restTemplate.exchange(CLIENT_REGISTRATION_URL, HttpMethod.POST, new HttpEntity<>(userRegistrationDto, headers), String.class);
     }
 }

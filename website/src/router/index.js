@@ -14,6 +14,7 @@ import Editor from "@/components/user-layout/Editor.vue"
 import RegisterView from "@/views/RegisterView.vue";
 
 import Cookie from 'js-cookie';
+
 // -artykuly i artykul- do usuniecia mozna przekierowac do 404 za pomoca useRouter np gdy dane zapytanie nie na wynikow 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),

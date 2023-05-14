@@ -86,6 +86,16 @@ import {useRouter} from 'vue-router'
       router.push('/')
     }
 
+      // window.location.href = '/home';
+    }
+
+    if (username == "user"){
+      Cookie.set('role', 'user')
+      router.push('/')
+      // window.location.href = '/home';
+    }
+
+
     console.log(username, password);
   }
   

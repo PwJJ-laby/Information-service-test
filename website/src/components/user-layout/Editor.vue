@@ -2,10 +2,6 @@
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import '@vueup/vue-quill/dist/vue-quill.core.css';
-import { ref, reactive, onMounted, onBeforeMount } from 'vue';
-import { useRoute } from 'vue-router';
-import Cookie from "js-cookie";
-
 
 const quillEditor = ref()
 const content = ref("")
@@ -33,7 +29,6 @@ function quillReady(){
   console.log("quill ready")
 }
 
-
 onMounted(() => {
   console.log("mounted")
   let route = useRoute();
@@ -42,10 +37,7 @@ onMounted(() => {
     content.value = JSON.parse(sessionStorage.getItem("articleToEdit")).content
     title.value = JSON.parse(sessionStorage.getItem("articleToEdit")).title
   }
-  role.value = Cookie.get("role");
-  // role.content = Cookie.get("role");
-  // console.log(role.content)
-  // console.log(content)
+
   // quillEditor.value.focus()
 })
 
@@ -66,10 +58,7 @@ onMounted(() => {
     </select><br/>
     <label for="category">Oznacz jako:</label>
     <select  class="category_input">
-      <option value="draft" v-if="role=='journalist'">Szkic</option>
-      <option value="ready" v-if="role=='journalist' || role=='redactor' || role=='corrector'">Gotowy</option>
-      <option value="corrected" v-if="role=='corrector'">Poprawiony</option>
-      <option value="approved" v-if="role=='redactor'">Zaakceptowany</option>
+
     </select><br/>
     <button class="save_button">Zapisz</button>
     <br/><br/>

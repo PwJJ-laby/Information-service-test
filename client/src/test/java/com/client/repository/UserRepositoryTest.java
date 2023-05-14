@@ -80,6 +80,17 @@ public class UserRepositoryTest {
     }
 
     @Test
+    public void user_exists_by_username() {
+        // given
+        user.setUsername("john");
+        userRepository.save(user);
+        // when
+        boolean exists = userRepository.existsUsersByUsername("john");
+        // then
+        assertTrue(exists);
+    }
+
+    @Test
     public void delete_user_by_id() {
         // given
         userRepository.save(user);

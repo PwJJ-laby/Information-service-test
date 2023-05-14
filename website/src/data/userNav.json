@@ -18,6 +18,10 @@
         "authorities":["journalist", "admin", "redactor", "corrector"]
     },
     {
+        "link":"/userpanel/articles",
+        "text":"Artykuły w przygotowaniu"
+    },
+    {
         "link":"/userpanel/edit",
         "text":"Edytor artykułów",
         "authorities":["journalist", "admin", "redactor"]

@@ -19,6 +19,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE ud.email = :email")
     boolean existsUsersByEmail(@Param("email") String email);
 
+    @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u " +
+            "WHERE u.username = :username")
+    boolean existsUsersByUsername(@Param("username") String username);
+
     @Modifying
     @Query("DELETE FROM User u WHERE u.id =:id")
     void deleteUserById(Long id);

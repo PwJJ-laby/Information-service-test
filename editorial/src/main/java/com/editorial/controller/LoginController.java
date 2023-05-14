@@ -1,6 +1,7 @@
 package com.editorial.controller;
 
 import com.editorial.model.dto.LoginDto;
+import com.editorial.service.LoginService;
 import com.editorial.service.LoginServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/editorial")
 public class LoginController {
 
-    private final LoginServiceImpl loginService;
+    private final LoginService loginService;
 
     @Autowired
-    public LoginController(LoginServiceImpl loginService) {
+    public LoginController(LoginService loginService) {
         this.loginService = loginService;
     }
 
