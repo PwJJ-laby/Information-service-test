@@ -12,6 +12,9 @@ import Topics from "@/components/user-layout/Topics.vue"
 import ArticlesList from "@/components/user-layout/ArticlesList.vue"
 import Editor from "@/components/user-layout/Editor.vue"
 import RegisterView from "@/views/RegisterView.vue";
+
+import Cookie from 'js-cookie';
+
 // -artykuly i artykul- do usuniecia mozna przekierowac do 404 za pomoca useRouter np gdy dane zapytanie nie na wynikow 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,11 +57,11 @@ const router = createRouter({
         {
             path: "/userpanel",
             name: 'userpanel',
-            redirect: "/userpanel/info",
+            redirect: "/userpanel/profile",
             component: UserPanelView,
             children: [
                 {
-                    path: '/userpanel/info',
+                    path: '/userpanel/profile',
                     component: UserInfo
                 },
                 {
@@ -73,10 +76,6 @@ const router = createRouter({
                 {
                     path: "/userpanel/articles",
                     component: ArticlesList
-                },
-                {
-                    path: "/userpanel/profile",
-                    redirect: '/userpanel/info'
                 },
             ],
         },
@@ -105,6 +104,33 @@ const router = createRouter({
             redirect: '404'
         }
     ]
+})
+
+//route guard
+const protectedRoutes = ['userpanel', 'edit', 'topics', 'articles'];
+
+const roleRoutes = {
+    'journalist': ['userpanel', 'edit', 'topics', 'articles'],
+    'corrector': ['userpanel', 'edit', 'articles'],
+    'user': ['userpanel', 'info'],
+    'admin': 'all'
+}
+
+router.beforeEach((to, from, next) => {
+    const role = Cookie.get('role');
+
+    if (!protectedRoutes.includes(to.name))
+        next();
+
+
+    if (to.name === 'userpanel' && (role == undefined || role == null || role == '') ) next({ name: '/login' })
+
+    if (role && protectedRoutes.includes(to.name)){
+        if (roleRoutes[role].includes(to.name) || role === 'admin') next();
+    } else
+        next('/')
+
+    next("/login");
 })
 
 export default router

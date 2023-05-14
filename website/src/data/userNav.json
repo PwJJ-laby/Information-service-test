@@ -9,7 +9,13 @@
     },
     {
         "link":"/userpanel/topics",
-        "text":"Tematy"
+        "text":"Tematy",
+        "authorities":["journalist", "admin", "redactor"]
+    },
+    {
+        "link":"/userpanel/articles",
+        "text":"Artykuły w przygotowaniu",
+        "authorities":["journalist", "admin", "redactor", "corrector"]
     },
     {
         "link":"/userpanel/articles",
@@ -17,6 +23,7 @@
     },
     {
         "link":"/userpanel/edit",
-        "text":"Edytor artykułów"
+        "text":"Edytor artykułów",
+        "authorities":["journalist", "admin", "redactor"]
     }
 ]

@@ -2,8 +2,6 @@
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import '@vueup/vue-quill/dist/vue-quill.core.css';
-import { ref, reactive, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
 
 const quillEditor = ref()
 const content = ref("")
@@ -15,6 +13,7 @@ const options = reactive({
     placeholder: 'Zacznij pisać artykuł...',
 })
 
+const role = ref("")
 
 // TODO: 
 // - autosave every n minutes/seconds,
@@ -38,6 +37,7 @@ onMounted(() => {
     content.value = JSON.parse(sessionStorage.getItem("articleToEdit")).content
     title.value = JSON.parse(sessionStorage.getItem("articleToEdit")).title
   }
+
   // quillEditor.value.focus()
 })
 
@@ -58,10 +58,7 @@ onMounted(() => {
     </select><br/>
     <label for="category">Oznacz jako:</label>
     <select  class="category_input">
-      <option value="draft">Szkic</option>
-      <option value="ready">Gotowy</option>
-      <option value="corrected">Poprawiony</option>
-      <option value="approved">Zaakceptowany</option>
+
     </select><br/>
     <button class="save_button">Zapisz</button>
     <br/><br/>

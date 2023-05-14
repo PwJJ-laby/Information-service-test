@@ -56,7 +56,7 @@ data.push({
 
 const searchTerm = ref(""); // Search text
 const newTopicProposal = ref(""); // user input with proposition
-const maxId = ref(127); // last id assigned
+const maxId = ref(128); // last id assigned
 
 // Table config
 const table = reactive({
@@ -125,7 +125,7 @@ function changeTopicListener(){
 
   //TODO: make request instead of local change
   if (newTopic != null && newTopic !== ''){
-      let id = this.getAttribute('topicId');
+      let id = this.getAttribute('topicId')-1;
       data[id].topic = newTopic;
       data[id].date = new Date().toDateString();
       data[id].state = "proposed";
@@ -136,12 +136,9 @@ function changeTopicListener(){
 function changeStateListener(){
 
   //TODO: make request instead of local change
-  let id = this.getAttribute('topicId');
+  let id = this.getAttribute('topicId')-1;
   let currentState = data[id].state;
-  console.log(currentState);
-  console.log(id);
-  console.log(data[id]);
-  console.log(this)
+
   if (currentState == 'proposed')
       data[id].state = 'approved';
   else if (currentState == 'approved')
@@ -169,7 +166,6 @@ function addListeners(className, listenerFunction){
 const tableLoadingFinish = () => {
 
   table.isLoading = false;
-  console.log("loading")
   addListeners("topic", changeTopicListener);
   if (jsCookie.get('role') == 'admin' || jsCookie.get('role') == 'redactor')
       addListeners("state", changeStateListener);
@@ -178,7 +174,7 @@ const tableLoadingFinish = () => {
 
 const addTopic = () =>{
   data.push({
-          id: ++maxId.value,
+          id: maxId.value++,
           user: 'user',
           topic: newTopicProposal.value,
           date: new Date().toDateString(),

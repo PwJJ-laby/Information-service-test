@@ -1,11 +1,12 @@
 <script setup>
 import list from "@/data/userNav.json"
+import jsCookie from "js-cookie";
 </script>
 
 <template>
   <table>
     <div class="buttons" v-for="item in list">
-      <button><router-link :to="item.link" ><a>{{item.text}}</a></router-link></button>
+      <button v-if="!item.authorities || item.authorities.includes(jsCookie.get('role'))"><router-link :to="item.link" ><a>{{item.text}}</a></router-link></button>
     </div>
   </table>
 </template>

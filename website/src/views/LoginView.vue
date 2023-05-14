@@ -23,23 +23,41 @@ import {useRouter} from 'vue-router'
     console.log(requestBody);
     // make request to backend
     try {
-      const response = await fetch('http://localhost:8080/client/login/v2', {
+      const url = 'http://localhost:8080/client/login/v2';
+
+      const data = `{
+          "username": "Tom",
+          "password": "Tom123"
+      }`;
+
+      const response = await fetch(url, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
           },
-          body: requestBody,
-        });
-        console.log("hejo")
-        // If the request is not successful, throw an error
-        // if (!response.ok) {
-        //   throw new Error(await response.text());
-        // }
+          body: data,
+      });
 
-        // // Parse the response JSON and store the token in local storage
-        // const data = await response.json();
-        console.log(response);
-        localStorage.setItem('token', data.token);
+      const text = await response.text();
+
+      console.log(text);
+      // const response = await fetch('http://localhost:8080/client/login/v2', {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: requestBody,
+      //   });
+      //   console.log("hejo")
+      //   // If the request is not successful, throw an error
+      //   // if (!response.ok) {
+      //   //   throw new Error(await response.text());
+      //   // }
+
+      //   // // Parse the response JSON and store the token in local storage
+      //   // const data = await response.json();
+      //   console.log(response);
+      //   localStorage.setItem('token', data.token);
 
         // Redirect to the dashboard page
         // router.push('/dashboard');
@@ -51,6 +69,23 @@ import {useRouter} from 'vue-router'
     if (username == "admin"){
       Cookie.set('role', 'admin')
       router.push('/')
+    }
+
+    if (username == "journalist"){
+      Cookie.set('role', 'journalist')
+      router.push('/')
+    }
+
+    if (username == "redactor"){
+      Cookie.set('role', 'redactor')
+      router.push('/')
+    }
+
+    if (username == "corrector"){
+      Cookie.set('role', 'corrector')
+      router.push('/')
+    }
+
       // window.location.href = '/home';
     }
 
@@ -59,6 +94,7 @@ import {useRouter} from 'vue-router'
       router.push('/')
       // window.location.href = '/home';
     }
+
 
     console.log(username, password);
   }
